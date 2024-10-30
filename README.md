@@ -1,0 +1,1 @@
+Welcome to my Web3 Course repository! This repository will contain all submissions and project files for the Web3 course. Each module or task will be organized into folders to ensure easy navigation and clarity.
