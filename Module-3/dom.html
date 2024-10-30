@@ -1,0 +1,144 @@
+<!-- Build a Table -->
+
+<h1>Mountains</h1>
+
+<div id="mountains"></div>
+
+<script>
+  const MOUNTAINS = [
+    {name: "Kilimanjaro", height: 5895, place: "Tanzania"},
+    {name: "Everest", height: 8848, place: "Nepal"},
+    {name: "Mount Fuji", height: 3776, place: "Japan"},
+    {name: "Vaalserberg", height: 323, place: "Netherlands"},
+    {name: "Denali", height: 6168, place: "United States"},
+    {name: "Popocatepetl", height: 5465, place: "Mexico"},
+    {name: "Mont Blanc", height: 4808, place: "Italy/France"}
+  ];
+
+// Get the container element
+const mountNode = document.getElementById("mountains");
+
+// Create and build the table
+const table = document.createElement("table");
+
+// Get column names from first object's keys
+const headers = Object.keys(MOUNTAINS[0]);
+
+// Create header row
+const headerRow = document.createElement("tr");
+headers.forEach(header => {
+  const th = document.createElement("th");
+  th.appendChild(document.createTextNode(header));
+  headerRow.appendChild(th);
+});
+table.appendChild(headerRow);
+
+// Create data rows
+MOUNTAINS.forEach(mountain => {
+  const row = document.createElement("tr");
+  headers.forEach(header => {
+    const cell = document.createElement("td");
+    cell.appendChild(document.createTextNode(mountain[header]));
+    // Right-align numbers
+    if (typeof mountain[header] === "number") {
+      cell.style.textAlign = "right";
+    }
+    row.appendChild(cell);
+  });
+  table.appendChild(row);
+});
+
+// Add table to the document
+mountNode.appendChild(table);
+</script>
+
+<!-- Elements by tag name -->
+
+<h1>Heading with a <span>span</span> element.</h1>
+<p>A paragraph with <span>one</span>, <span>two</span>
+  spans.</p>
+
+<script>
+  function byTagName(node, tagName) {
+  // Convert tagName to lowercase for case-insensitive comparison
+  tagName = tagName.toLowerCase();
+  let elements = [];
+  
+  // Recursive function to traverse the DOM
+  function traverse(currentNode) {
+    // Check if current node is an element node (nodeType === 1)
+    if (currentNode.nodeType === Node.ELEMENT_NODE) {
+      // If the node matches our tag name, add it to results
+      if (currentNode.nodeName.toLowerCase() === tagName) {
+        elements.push(currentNode);
+      }
+      
+      // Recursively check all child nodes
+      for (let child of currentNode.childNodes) {
+        traverse(child);
+      }
+    }
+  }
+  
+  // Start the traversal from the provided node
+  traverse(node);
+  return elements;
+}
+
+  console.log(byTagName(document.body, "h1").length);
+  // → 1
+  console.log(byTagName(document.body, "span").length);
+  // → 3
+  let para = document.querySelector("p");
+  console.log(byTagName(para, "span").length);
+  // → 2
+</script>
+
+<!-- The cat's hat -->
+
+<style>body { min-height: 200px }</style>
+<img src="img/cat.png" id="cat" style="position: absolute">
+<img src="img/hat.png" id="hat" style="position: absolute">
+
+<script>
+let cat = document.querySelector("#cat");
+let hat = document.querySelector("#hat");
+let angle = 0;
+let lastTime = null;
+
+// Constants for the animation
+const CAT_ORBIT_X = 200;  // Cat's horizontal orbit radius
+const CAT_ORBIT_Y = 40;   // Cat's vertical orbit radius
+const CAT_CENTER_X = 230; // Center point X for cat's orbit
+const CAT_CENTER_Y = 40;  // Center point Y for cat's orbit
+const HAT_ORBIT_RADIUS = 50; // Hat's orbit radius around cat
+const HAT_ORBIT_SPEED = 3;   // How much faster the hat orbits than the cat
+
+function animate(time) {
+  if (lastTime != null) {
+    angle += (time - lastTime) * 0.001;
+  }
+  lastTime = time;
+  
+  // Calculate cat's position
+  let catX = Math.cos(angle) * CAT_ORBIT_X + CAT_CENTER_X;
+  let catY = Math.sin(angle) * CAT_ORBIT_Y + CAT_CENTER_Y;
+  
+  // Update cat's position
+  cat.style.left = catX + "px";
+  cat.style.top = catY + "px";
+  
+  // Calculate hat's position - it orbits around the cat
+  let hatAngle = angle * HAT_ORBIT_SPEED;
+  let hatX = catX + Math.cos(hatAngle) * HAT_ORBIT_RADIUS;
+  let hatY = catY + Math.sin(hatAngle) * HAT_ORBIT_RADIUS;
+  
+  // Update hat's position
+  hat.style.left = hatX + "px";
+  hat.style.top = hatY + "px";
+  
+  requestAnimationFrame(animate);
+}
+
+requestAnimationFrame(animate);
+</script>
